@@ -12,10 +12,15 @@ const BG = () => {
 
     return ( 
 
-        <svg viewBox={`0 0 ${canvasWidth} ${canvasHeight}`} width={canvasWidth} height={canvasHeight} style={bgStyle}>
-            
-            {birds.map( bird => <Bird key={bird.id} birdData={bird}/>)}
-        </svg>
+        <React.Fragment>
+            <svg viewBox={`0 0 ${canvasWidth} ${canvasHeight}`} width={canvasWidth} height={canvasHeight} style={bgStyle}>
+                
+                {birds.map( bird => <Bird key={bird.id} birdData={bird}/>)}
+
+            </svg>
+            div
+        </React.Fragment>
+
    
 
        

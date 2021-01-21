@@ -1,8 +1,8 @@
 import React from 'react'
 
-const Eye = ({eyeData}) => {
-   
-    const { x, y, size, eyeWhiteColor, irisColor, pupilColor } = eyeData;
+
+
+const Eye = ({x, y, size, eyeWhiteColor, irisColor, pupilColor}) => {
  
     return ( 
         <g>
