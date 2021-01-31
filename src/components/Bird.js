@@ -3,6 +3,8 @@ import Head from './Head';
 import Eye from './Eye';
 import Beak from './Beak';
 
+console.log('bird type:', typeof Beak)
+
 class Bird extends React.Component {
     
     constructor(props){
@@ -29,8 +31,12 @@ class Bird extends React.Component {
             zIndex: this.props.birdData.zIndex,
             front : false,
             growing : false,
+            soundPlaying: false,
+            howl: this.props.birdData.howl,
+           
         };
 
+        this.audioRef = React.createRef();
     // this.animate()        
 
         setInterval(this.move, this.speed);
@@ -98,15 +104,16 @@ class Bird extends React.Component {
 
     grow = () => {
         const { headSize, zIndex, front, growing } = this.state;
-        
-        const newZindex = front ? zIndex : zIndex + 10;
-        console.log(newZindex);
+
+        this.setState({ headSize: headSize * 1.05});
+        // console.log(headSize, growing);
+        // const newZindex = front ? zIndex : zIndex + 10;
+        // console.log(newZindex);
         if(headSize < 300 && growing){
-            console.log('growing')
+            // console.log('growing')
             requestAnimationFrame(this.grow)
         }
-        setTimeout(this.reduceHeadSize, 1000);
-        this.setState({ headSize: headSize * 1.2, zIndex: newZindex, front : true});
+        
     
     }
 
@@ -118,23 +125,47 @@ class Bird extends React.Component {
         this.setState({ irisColor: col, eyeToggle: newEyeToggle, coinVal: newCoinVal })
     }
 
-    render(){
-        const { center, headSize, irisColor, randomLeftEyeVal, randomRightEyeVal, opacity, zIndex, front } = this.state;
-        const { headColor1, headColor2 } = this.props.birdData;
-        // console.log(headSize);
-        if(front){
-            console.log(zIndex);
+    playSound(){
+        const { howl, soundPlaying } = this.state;
+        if(!soundPlaying){
+            howl.play();
         }
+        // const audio = new Audio(this.audioRef.current.src);
+        // audio.play();
+        // console.log(audio, audio.play());
+        this.setState({ soundPlaying : true })
+    }
+
+    triggerGrowing(){
+
+        this.playSound()
+       
+
+
+        setTimeout(this.reduceHeadSize, 3000);
+        this.setState({growing: true, front : true, soundPlaying: true }, () => this.grow());
+    }
+
+    render(){
+        const { center, headSize, irisColor, randomLeftEyeVal, randomRightEyeVal, opacity, zIndex } = this.state;
+        const { headColor1, headColor2, soundFile } = this.props.birdData;
+        // console.log(headSize);
+        // if(front){
+        //     console.log(zIndex);
+        // }
         return ( 
             <React.Fragment>
             {headSize > 10 &&
-            <g style={{position: 'absolute', zIndex: `${zIndex}` }}  onClick={() => this.grow()} onMouseEnter={() => this.seeRed()} onMouseLeave={() => this.seeRed()}>
+            <g style={{position: 'absolute', zIndex: `${zIndex}` }}  onClick={() => this.triggerGrowing()} onMouseEnter={() => this.seeRed()} onMouseLeave={() => this.seeRed()}>
                 <Head x={center.x} y={center.y} headSize={headSize} headColor1={headColor1} headColor2={headColor2} opacity={opacity}/> 
                 <Eye x={center.x - headSize/3 + randomLeftEyeVal} y={center.y - headSize/9} size={headSize/3} eyeWhiteColor={'#FFF'} irisColor={irisColor} pupilColor={'#000'}/>
                 <Eye x={center.x + headSize/3 - randomRightEyeVal} y={center.y - headSize/9} size={headSize/3} eyeWhiteColor={'#FFF'} irisColor={irisColor} pupilColor={'#000'}/>
                 <Beak x={center.x} y={center.y + headSize/4} width={headSize/9} height={headSize/3}/>
             </g>
             }
+            
+            <audio ref={this.audioRef} src={soundFile} autoPlay/>
+            
              </React.Fragment>
      );
     }

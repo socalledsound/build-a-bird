@@ -6,7 +6,13 @@ const Head = ({ x, y, headSize, headColor1, headColor2, opacity } ) =>  {
     const numCircles = 30;
     const gradient = getColorGradient(headColor1, headColor2);
     const colors = Array.from({length: numCircles * 10 }, (__ , i ) => gradient(i/20));
-    const circleSizes = Array.from({ length: numCircles }, (_ , i) => headSize - i * 6  );
+    const circleSizes = Array.from({ length: numCircles }, (_ , i) => {
+        let newHeadsize = headSize - i * 6;  
+        if(newHeadsize < 0){
+            newHeadsize = 0;
+        }
+        return newHeadsize
+    });
 
         // {/* <defs>
         // <linearGradient id="grad3" x1="0%" y1="0%" x2="100%" y2="0%">
