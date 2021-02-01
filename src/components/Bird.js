@@ -10,8 +10,10 @@ class Bird extends React.Component {
     constructor(props){
         super(props)
         this.state = {
-            headSize: this.props.birdData.headSize,
-            originalHeadSize : 50,
+            headSize: this.props.birdData.startHeadSize,
+            startHeadSize : this.props.birdData.startHeadSize,
+            largeHeadSize: this.props.birdData.largeHeadSize, 
+            smallHeadSize: this.props.birdData.smallHeadSize,
             irisColor: this.props.birdData.irisColor,
             originalIrisColor: this.props.birdData.irisColor,
             altIrisColor: '#FF0000',
@@ -35,7 +37,7 @@ class Bird extends React.Component {
             howl: this.props.birdData.howl,
            
         };
-
+        this.maxHeadSize = 300;
         this.audioRef = React.createRef();
     // this.animate()        
 
@@ -94,22 +96,22 @@ class Bird extends React.Component {
     }
 
     reduceHeadSize = () => {
-        const { headSize, originalHeadSize, zIndex } = this.state;
+        const { headSize, smallHeadSize, zIndex } = this.state;
         const newZindex = zIndex - 1;
-        if(headSize > originalHeadSize){
+        if(headSize > smallHeadSize){
             requestAnimationFrame(this.reduceHeadSize)
         }
-        this.setState({ headSize: headSize * 0.95, opacity: 0.1, zIndex: newZindex});
+        this.setState({ headSize: headSize * 0.8, opacity: 0.1, zIndex: newZindex});
     }
 
     grow = () => {
-        const { headSize, zIndex, front, growing } = this.state;
+        const { headSize, largeHeadSize, zIndex, front, growing } = this.state;
 
         this.setState({ headSize: headSize * 1.05});
         // console.log(headSize, growing);
         // const newZindex = front ? zIndex : zIndex + 10;
         // console.log(newZindex);
-        if(headSize < 300 && growing){
+        if(headSize < largeHeadSize && headSize < this.maxHeadSize && growing){
             // console.log('growing')
             requestAnimationFrame(this.grow)
         }

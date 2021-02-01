@@ -10,19 +10,22 @@ const minSize = 10;
 
 
 const soundRefs = loadSounds(sounds);
-console.log(soundRefs);
+//console.log(soundRefs);
 
 
 
 
 export const birds = Array.from({length: numBirds}, (bird, index) => {
- return(
+ const baseHeadSize = Math.random() * canvasHeight/4 + minSize;
+    return(
     {
         id: index,
         // soundFile: sounds[index%numSounds],
         howl: howls[index%6],
         center: { x: Math.random() * canvasWidth, y: Math.random() * canvasHeight },
-        headSize: Math.random() * canvasHeight/4 + minSize,
+        startHeadSize: baseHeadSize,
+        smallHeadSize: baseHeadSize/3,
+        largeHeadSize: baseHeadSize * 1.2,
         headColor1: getRandomColor(),
         headColor2: getRandomColor(),
         irisColor: getRandomColor(),
